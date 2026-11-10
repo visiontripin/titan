@@ -1,2 +1,2 @@
-# titan
+# Titan
 heavy equipment rental service
