@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Titan — Аренда мобильных автокранов в Москве онлайн. Цена известна до поездки</title>
+<meta name="description" content="Доверительный сервис аренды мобильных автокранов в Москве и МО: онлайн-калькулятор, техника с ПТС и Ростехнадзором, замена при поломке за 1 час, круглосуточно.">
+<style>
+  :root{
+    --navy:#0f2a43; --navy-light:#163a5c; --steel:#2e5a86; --accent:#f59e0b; --accent-dark:#d97706;
+    --bg:#f7fafc; --card:#ffffff; --text:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+    --green:#10b981; --red:#ef4444; --shadow:0 10px 30px -10px rgba(15,42,67,0.12);
+    --radius:12px; --maxw:1200px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.6}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  .section{padding:70px 0}
+  .section-title{font-size:28px;font-weight:700;color:var(--navy);margin-bottom:10px;letter-spacing:-0.4px}
+  .section-sub{color:var(--muted);font-size:17px;margin-bottom:40px;max-width:760px}
+  .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;background:#eef4fb;color:var(--navy)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:10px;font-weight:700;font-size:16px;background:var(--accent);color:#fff;border:none;cursor:pointer;transition:background .2s,transform .1s}
+  .btn:hover{background:var(--accent-dark)}
+  .btn:active{transform:scale(.97)}
+  .btn-outline{background:transparent;border:2px solid var(--line);color:var(--navy)}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent-dark)}
+  .btn-full{width:100}
+  header{position:sticky;top:0;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:100}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;gap:16px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px;color:var(--navy)}
+  .logo .mark{width:28px;height:28px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:#fff;font-weight:900;font-size:16px}
+  nav ul{display:flex;gap:26px;list-style:none}
+  nav a{font-size:15px;font-weight:500;color:var(--muted);transition:color .2s}
+  nav a:hover{color:var(--navy)}
+  .header-actions{display:flex;align-items:center;gap:12px}
+  .phone{font-weight:700;color:var(--navy);font-size:15px}
+  .hero{padding:64px 0 52px;position:relative;overflow:hidden}
+  .hero .container{display:grid;grid-template-columns:1fr 420px;gap:40px;align-items:center}
+  .hero h1{font-size:40px;line-height:1.15;color:var(--navy);margin-bottom:16px;letter-spacing:-0.6px}
+  .hero h1 .accent{color:var(--accent)}
+  .hero p{font-size:18px;color:var(--muted);margin-bottom:24px;max-width:540px}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-stats{margin-top:32px;display:flex;gap:26px;flex-wrap:wrap}
+  .stat{font-size:15px}
+  .stat b{display:block;font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums}
+  .calc-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);position:sticky;top:80px}
+  .calc-card h3{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--navy)}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .field input{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:#fff}
+  .field input:focus{outline:none;border-color:var(--steel)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .calc-result{margin-top:20px;padding:18px;border:1px dashed var(--line);border-radius:10px;background:#fbfdfd;display:none}
+  .calc-result.show{display:block}
+  .calc-result h4{font-size:14px;color:var(--muted);margin-bottom:8px}
+  .res-line{display:flex;justify-content:space-between;font-size:15px;margin-bottom:6px}
+  .res-line b{color:var(--navy);font-variant-numeric:tabular-nums}
+  .res-total{border-top:2px solid var(--accent);padding-top:10px;margin-top:8px;font-size:18px;font-weight:800;color:var(--navy);display:flex;justify-content:space-between}
+  .trust{padding:40px 0;background:#fff}
+  .trust .container{display:flex;flex-wrap:wrap;gap:24px;justify-content:center;align-items:center;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0}
+  .trust-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);font-weight:500;min-width:190px}
+  .trust-item .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .step .num{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:700;font-size:15px;margin-bottom:16px}
+  .step h4{font-size:17px;margin-bottom:8px;color:var(--navy)}
+  .step p{font-size:14.5px;color:var(--muted)}
+  .calc-section{background:#eef4fb}
+  .calc-section .container{display:grid;grid-template-columns:1fr 430px;gap:46px;align-items:start}
+  .calc-left h2{font-size:30px;color:var(--navy);margin-bottom:12px;line-height:1.2}
+  .calc-left p{color:var(--muted);font-size:17px;margin-bottom:24px;max-width:520px}
+  .calc-left .ul{list-style:none;margin-bottom:24px}
+  .calc-left .ul li{font-size:15.5px;color:var(--text);margin-bottom:10px;padding-left:26px;position:relative}
+  .calc-left .ul li::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;background:var(--accent)}
+  .fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+  .crane{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;transition:transform .2s,box-shadow .2s}
+  .crane:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+  .crane-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .crane h4{font-size:17px;color:var(--navy)}
+  .crane .price{font-size:15px;font-weight:700;color:var(--accent-dark);font-variant-numeric:tabular-nums}
+  .crane p{font-size:13.5px;color:var(--muted);margin:4px 0}
+  .crane .spec{display:flex;gap:10px;font-size:12px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
+  .why{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+  .why-item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px}
+  .why-item h4{font-size:17px;margin-bottom:8px;color:var(--navy)}
+  .why-item p{font-size:14.5px;color:var(--muted)}
+  .resume{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .resume-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+  .res-card{background:#fbfdfe;border:1px solid var(--line);border-radius:12px;padding:20px}
+  .res-card .v{font-size:24px;font-weight:800;color:var(--navy);font-variant-numeric:tabular-nums}
+  .res-card .l{font-size:13px;color:var(--muted);margin-top:6px}
+  .roadmap{display:flex;flex-direction:column;gap:22px}
+  .rm-item{display:grid;grid-template-columns:140px 1fr;gap:20px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+  .rm-phase{font-size:13px;font-weight:700;color:var(--accent-dark);white-space:nowrap}
+  .rm-title{font-weight:700;color:var(--navy);margin-bottom:4px}
+  .rm-desc{font-size:14px;color:var(--muted);margin-bottom:6px}
+  .rm-meta{font-size:12px;color:var(--mixed,var(--muted))}
+  .faq{max-width:760px;margin:0 auto}
+  .faq-item{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;overflow:hidden}
+  .faq-q{background:#fbfdfe;padding:16px 20px;font-weight:600;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+  .faq-q:hover{background:#f2f7fb}
+  .faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height .25s;font-size:14px;color:var(--muted);border-top:1px solid var(--line)}
+  .faq-a.open{padding:16px 20px;max-height:400px}
+  .contact{background:var(--navy);color:#fff;padding:60px 0}
+  .contact h2{color:#fff;font-size:30px;margin-bottom:12px}
+  .contact p{color:#cbd5e1;margin-bottom:30px}
+  .form-card{background:#fff;color:var(--text);border-radius:14px;padding:26px;max-width:520px}
+  .form-card h3{font-size:18px;margin-bottom:18px;color:var(--navy)}
+  .form-card .field{margin-bottom:16px}
+  .form-card label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+  .form-card input,.form-card select,.form-card textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;background:#fff;font-family:inherit}
+  .form-card textarea{min-height:80px;resize:vertical}
+  .form-card .checkbox{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13px;color:var(--muted)}
+  .form-card input[type=checkbox]{width:auto}
+  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--muted);font-size:13px}
+  .footer-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px}
+  .modal{display:none;fixed:inset:0;background:rgba(15,42,67,.5);z-index:1000;align-items:center;justify-content:center;padding:20px}
+  .modal.open{display:flex}
+  .modal-content{background:#fff;border-radius:14px;padding:30px;max-width:460px;width:100%;position:relative}
+  .modal-close{position:absolute;top:14px;right:16px;border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer}
+  .modal h3{font-size:20px;margin-bottom:10px;color:var(--navy)}
+  .modal p{color:var(--muted);margin-bottom:20px;font-size:15px}
+  .hide{display:none!important}
+  @media (max-width:900px){
+    .hero .container,.calc-section .container{grid-template-columns:1fr}
+    .calc-card{position:static}
+    .hero h1{font-size:32px}
+    .rm-item{grid-template-columns:1fr}
+    .rm-phase{white-space:normal}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="topbar container">
+    <div class="logo"><div class="mark">T</div>TITAN</div>
+    <nav>
+      <ul>
+        <li><a href="#calculator">Онлайн-подбор</a></li>
+        <li><a href="#fleet">Автопарк</a></li>
+        <li><a href="#why">Преимущества</a></li>
+        <li><a href="#resume">Резюме рынка</a></li>
+        <li><a href="#roadmap">Дорожная карта</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <div class="phone">+7 (495) 000-00-00</div>
+      <a href="#order" class="btn">Вызвать кран</a>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="container">
+    <div>
+      <span class="badge">Аренда мобильных автокранов · Москва и МО</span>
+      <h1>Аренда автокрана <span class="accent">без скрытых платежей</span></h1>
+      <p>Итоговая цена известна ещё до выезда машины. Техника с ПТС и освидетельствованием Ростехнадзора, аттестованные экипажи, страхование груза, замена при поломке за 1 час. Работаем круглосуточно.</p>
+      <div class="hero-actions">
+        <a href="#calculator" class="btn">Рассчитать стоимость</a>
+        <a href="#order" class="btn btn-outline">Бронировать онлайн</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>от 8 000 ₽</b>за смену (7+1 ч)</div>
+        <div class="stat"><b>14–500 т</b>грузоподъёмность парка</div>
+        <div class="stat"><b>24/7</b>круглосуточная подача</div>
+        <div class="stat"><b>1 час</b>замена техники при поломке</div>
+      </div>
+    </div>
+    <div class="calc-card">
+      <h3>Быстрый расчёт</h3>
+      <div class="field">
+        <label>Вес груза, тонны</label>
+        <input type="number" id="cLoad" min="1" max="500" value="25">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Высота подъёма, м</label>
+          <input type="number" id="cHeight" min="3" max="136" value="20">
+        </div>
+        <div class="field">
+          <label>Вылет стрелы, м</label>
+          <input type="number" id="cRadius" min="2.5" max="98" step="0.5" value="15">
+        </div>
+      </div>
+      <div class="field">
+        <label>Адрес объекта</label>
+        <select id="cZone">
+          <option value="mkad">В пределах МКАД</option>
+          <option value="omkad">За МКАД (укажите км)</option>
+        </select>
+      </div>
+      <div class="field" id="kmField" style="display:none">
+        <label>Километров за МКАД (в одну сторону)</label>
+        <input type="number" id="cKm" min="1" max="100" value="10">
+      </div>
+      <button class="btn btn-full" id="calcBtn" style="margin-top:8px">Рассчитать кран</button>
+      <div class="calc-result" id="calcResult">
+        <h4>Подходящий автокран</h4>
+        <div class="res-line"><span>Модель</span><b id="rModel">—</b></div>
+        <div class="res-line"><span>Грузоподъёмность</span><b id="rCap">—</b></div>
+        <div class="res-line"><span>Стоимость смены (7+1 ч)</span><b id="rShift">—</b></div>
+        <div class="res-line"><span>Стоимость часа</span><b id="rHour">—</b></div>
+        <div class="res-line"><span>Доставка за МКАД</span><b id="rDel">—</b></div>
+        <div class="res-total"><span>Итог за смену</span><b id="rTotal">—</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust">
+  <div class="container">
+    <div class="trust-item"><span class="dot"></span>Официальный договор и акт приёма-передачи</div>
+    <div class="trust-item"><span class="dot"></span>ПТС и акты Ростехнадзора для каждой единицы техники</div>
+    <div class="trust-item"><span class="dot"></span>Страхование груза включено в тариф</div>
+    <div class="trust-item"><span class="dot"></span>Водители-машинисты со стажем от 5 лет</div>
+    <div class="trust-item"><span class="dot"></span>Безнал с НДС, оплата картой или по счёту</div>
+    <div class="trust-item"><span class="dot"></span>Замена неисправного крана за 1 час в Москве</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">Как это работает</h2>
+    <p class="section-sub">Четыре шага от заявки до начала работ — без звонков «в никуда» и непонятных доплат.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h4>Подберите кран</h4>
+        <p>Укажите вес груза, высоту и расстояние подъёма — калькулятор подберет подходящую модель и покажет конечную цену.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h4>Забронируйте онлайн</h4>
+        <p>Выберите дату и время подачи, укажите адрес объекта в Москве или Московской области.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h4>Заключите договор</h4>
+        <p>Оформляем договор и акт онлайн, безнал с НДС или оплата картой. Страхование груза уже входит в тариф.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h4>Работа на объекте</h4>
+        <p>Кран с аттестованным экипажем приезжает точно ко времени. При поломке — замена за 1 час в пределах Москвы.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section calc-section" id="calculator">
+  <div class="container">
+    <div class="calc-left">
+      <h2>Онлайн-подбор автокрана</h2>
+      <p>Не знаете, какая грузоподъёмность нужна? Введите параметры груза и объекта — система подберёт оптимальную машину из парка партнёров в Москве.</p>
+      <ul class="ul">
+        <li>Вес и габариты груза</li>
+        <li>Высота подъёма и рабочий радиус (вылет стрелы)</li>
+        <li>Состояние подъездных путей и площадки</li>
+        <li>Расстояние до объекта от МКАД</li>
+      </ul>
+      <a href="#order" class="btn">Оформить заявку на подбор</a>
+    </div>
+    <div class="calc-card" style="position:static">
+      <h3>Расчёт стоимости</h3>
+      <div class="field">
+        <label>Вес груза, тонны</label>
+        <input type="number" id="cLoad" min="1" max="500" value="25">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Высота подъёма, м</label>
+          <input type="number" id="cHeight" min="3" max="136" value="20">
+        </div>
+        <div class="field">
+          <label>Вылет стрелы, м</label>
+          <input type="number" id="cRadius" min="2.5" max="98" step="0.5" value="15">
+        </div>
+      </div>
+      <div class="field">
+        <label>Адрес объекта</label>
+        <select id="cZone">
+          <option value="mkad">В пределах МКАД</option>
+          <option value="omkad">За МКАД (укажите км)</option>
+        </select>
+      </div>
+      <div class="field" id="kmField" style="display:none">
+        <label>Километров за МКАД (в одну сторону)</label>
+        <input type="number" id="cKm" min="1" max="100" value="10">
+      </div>
+      <button class="btn btn-full" id="calcBtn" style="margin-top:8px">Рассчитать кран</button>
+      <div class="calc-result" id="calcResult">
+        <h4>Подходящий автокран</h4>
+        <div class="res-line"><span>Модель</span><b id="rModel">—</b></div>
+        <div class="res-line"><span>Грузоподъёмность</span><b id="rCap">—</b></div>
+        <div class="res-line"><span>Стоимость смены (7+1 ч)</span><b id="rShift">—</b></div>
+        <div class="res-line"><span>Стоимость часа</span><b id="rHour">—</b></div>
+        <div class="res-line"><span>Доставка за МКАД</span><b id="rDel">—</b></div>
+        <div class="res-total"><span>Итог за смену</span><b id="rTotal">—</b></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="fleet">
+  <div class="container">
+    <h2 class="section-title">Автопарк</h2>
+    <p class="section-sub">Мобильные автокраны от 14 до 500 тонн: телескопические и квадратные стрелы, колесные и вездеходные шасси, регистрация в Ростехнадзоре.</p>
+    <div class="fleet" id="fleetList"></div>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <div class="container">
+    <h2 class="section-title">Почему клиенты выбирают Titan</h2>
+    <div class="why">
+      <div class="why-item">
+        <h4>Цена без сюрпризов</h4>
+        <p>Итоговая стоимость рассчитывается онлайн и фиксируется в договоре. Простой, стропальщик, ночная смена и выезд за МКАД оговорены заранее.</p>
+      </div>
+      <div class="why-item">
+        <h4>Проверенная техника</h4>
+        <p>Каждая машина проходит ТО, имеет ПТС и акты освидетельствования Ростехнадзора. Страхование груза включено в базовый тариф.</p>
+      </div>
+      <div class="why-item">
+        <h4>Быстрая подача</h4>
+        <p>Собственные базы в округах Москвы позволяют подать кран в течение 1–2 часов после подтверждения заявки.</p>
+      </div>
+      <div class="why-item">
+        <h4>Гарантия замены</h4>
+        <p>При неисправности техники в течение смены мы заменим её на аналогичную за 1 час в пределах Москвы без дополнительной оплаты.</p>
+      </div>
+      <div class="why-item">
+        <h4>Юридическая защита</h4>
+        <p>Официальный договор, безнал с НДС, электронные закрывающие документы, работа с застройщиками и госзаказчиками.</p>
+      </div>
+      <div class="why-item">
+        <h4>Круглосуточно</h4>
+        <p>Приём заявок и подача техники 24/7, включая ночные смены, выходные и праздничные дни.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section resume" id="resume">
+  <div class="container">
+    <h2 class="section-title">Резюме исследования рынка</h2>
+    <p class="section-sub">Ключевые выводы анализа аренды мобильных автокранов в Москве, ставшие основой для УТП сервиса.</p>
+    <div class="resume-grid">
+      <div class="res-card"><div class="v">от 8 000 ₽</div><div class="l">стоимость смены (7+1 ч) кранов 14–16 т</div></div>
+      <div class="res-card"><div class="v">14–500 т</div><div class="l">диапазон грузоподъёмности парка по Москве</div></div>
+      <div class="res-card"><div class="v">50–360 ₽</div><div class="l">стоимость 1 км доставки за МКАД</div></div>
+      <div class="res-card"><div class="v">24/7</div><div class="l">круглосуточная подача техники</div></div>
+    </div>
+    <div class="why" style="margin-top:30px">
+      <div class="why-item">
+        <h4>Изъяны рынка</h4>
+        <p>Нет прозрачной цены онлайн, скрытые доплаты (простой, стропальщик, ночные смены, НДС), нет онлайн-брони, слабый мобильный интерфейс, низкое доверие к однодневкам.</p>
+      </div>
+      <div class="why-item">
+        <h4>Страхи заказчика</h4>
+        <p>Цена в чеке выше заявленной, кран приедет сломанным или опоздает, повреждение груза без компенсации, оплата вперёд без гарантий, неверный подбор тоннажа.</p>
+      </div>
+      <div class="why-item">
+        <h4>УТП сервиса Titan</h4>
+        <p>Онлайн-калькулятор с конечной ценой, техника с паспортами и застрахованными экипажами, замена при поломке за 1 час, договор и ЭДО, работа 24/7.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="roadmap">
+  <div class="container">
+    <h2 class="section-title">Дорожная карта разработки</h2>
+    <p class="section-sub">Путь от исследования до масштабируемого веб-сервиса аренды мобильных кранов.</p>
+    <div class="roadmap">
+      <div class="rm-item">
+        <div class="rm-phase">Этап 1 · нед. 1–2</div>
+        <div><div class="rm-title">Исследование и валидация</div><div class="rm-desc">Анализ рынка, цены, конкуренты, боли ЦА, выбор УТП, состав команды, ТЗ MVP.</div><div class="rm-meta">Результат: RESEARCH.md, утверждённое ТЗ</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">Этап 2 · нед. 3–4</div>
+        <div><div class="rm-title">UX/UI-прототип и лендинг</div><div class="rm-desc">Макеты ключевых страниц, адаптивный лендинг с интерактивным калькулятором-прототипом, юридический аудит текстов.</div><div class="rm-meta">Результат: index.html, макеты, готовый лендинг</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">Этап 3 · нед. 5–8</div>
+        <div><div class="rm-title">MVP: калькулятор + бэкенд заявок</div><div class="rm-desc">Справочник парка и тарифов, расчёт стоимости с доставкой за МКАД, онлайн-заявка, уведомление менеджеру, личный кабинет, аналитика и SEO.</div><div class="rm-meta">Результат: рабочий MVP, первые заявки</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">Этап 4 · нед. 9–10</div>
+        <div><div class="rm-title">Доверие и легальность</div><div class="rm-desc">Публикация ПТС, актов Ростехнадзора, страховок, верифицированные отзывы, электронный договор, ЭДО, безнал с НДС, поддержка 24/7.</div><div class="rm-meta">Результат: сервис готов к продажам</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">Этап 5 · нед. 11–12</div>
+        <div><div class="rm-title">Запуск и первые клиенты</div><div class="rm-desc">Публичный релиз, контекстная реклама по Москве/МО, локальное SEO (Яндекс.Справочник, 2ГИС), первые 10–20 аренд, сбор отзывов и кейсов.</div><div class="rm-meta">Результат: первые платящие клиенты, NPS</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-phase">Этап 6 · мес. 5–6</div>
+        <div><div class="rm-title">Масштабирование</div><div class="rm-desc">Карта доступности крана (ближайшая к объекту), маркетплейс парковладельцев, подписные тарифы для девелоперов, мобильные приложения, выход в регионы РФ.</div><div class="rm-meta">Результат: рост GMV, новые города</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title" style="text-align:center">Часто задаваемые вопросы</h2>
+    <div class="faq">
+      <div class="faq-item">
+        <div class="faq-q">Какая минимальная продолжительность аренды?<span class="q">▼</span></div>
+        <div class="faq-a">Минимальный заказ — 1 рабочая смена (7 рабочих часов + 1 час на подачу техники). Посменная и долгосрочная аренда дешевле часа.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Что входит в стоимость смены?<span class="q">▼</span></div>
+        <div class="faq-a">Аренда автокрана с экипажем (машинистом), топливо в рамках смены, подача в пределах МКАД и страхование груза. Доплата возможна за выезд за МКАД, стропальщика, ночную смену и простой по вине заказчика — все условия прописываются в договоре заранее.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Как выбрать грузоподъёмность крана?<span class="q">▼</span></div>
+        <div class="faq-a">Воспользуйтесь онлайн-калькулятором: укажите вес груза, высоту подъёма и вылет стрелы. Система подберет подходящую модель из парка. При сомнениях наш инженер проконсультирует бесплатно.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Есть ли гарантии, если техника сломается на объекте?<span class="q">▼</span></div>
+        <div class="faq-a">Да. При неисправности в течение смены мы заменим кран на аналогичный за 1 час в пределах Москвы без дополнительной оплаты.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">Как оплачивать аренду юридическому лицу?<span class="q">▼</span></div>
+        <div class="faq-a">Безналичный расчёт с НДС по счёту или договору, электронные закрывающие документы (акт приёма-передачи). Возможна оплата картой онлайн.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="order">
+  <div class="container" style="max-width:700px">
+    <h2 class="section-title" style="text-align:center">Оставить заявку на аренду</h2>
+    <p style="text-align:center;color:var(--muted);margin-bottom:30px">Расчёт и бронирование бесплатны. Менеджер перезвонит в течение 15 минут.</p>
+    <div class="form-card" id="orderForm">
+      <h3>Бронирование крана</h3>
+      <div class="field">
+        <label>Имя</label>
+        <input type="text" id="fName" placeholder="Иван Петров">
+      </div>
+      <div class="field">
+        <label>Телефон</label>
+        <input type="tel" id="fPhone" placeholder="+7 (999) 000-00-00">
+      </div>
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="fEmail" placeholder="ivan@example.ru">
+      </div>
+      <div class="field">
+        <label>Автокран (из расчёта)</label>
+        <select id="fCrane"><option value="">Не выбрано</option></select>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Дата подачи</label>
+          <input type="date" id="fDate">
+        </div>
+        <div class="field">
+          <label>Время</label>
+          <input type="time" id="fTime">
+        </div>
+      </div>
+      <div class="field">
+        <label>Адрес объекта (Москва / МО)</label>
+        <input type="text" id="fAddress" placeholder="ул. Например, д. 1">
+      </div>
+      <div class="field">
+        <label>Комментарий</label>
+        <textarea id="fComment" placeholder="Особенности площадки, груз, сроки…"></textarea>
+      </div>
+      <label class="checkbox">
+        <input type="checkbox" id="fAgree" required> Я согласен на обработку персональных данных и с условиями публичной оферты
+      </label>
+      <button class="btn btn-full" id="orderBtn" style="margin-top:12px">Отправить заявку</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <div class="logo" style="margin-bottom:8px"><div class="mark">T</div>TITAN</div>
+    <div style="font-size:13px;color:var(--muted);max-width:260px">Трудовой сервис аренды мобильных автокранов в Москве и Московской области. Прозрачная цена, договор, страхование груза, техника с Ростехнадзором.</div>
+    <div style="font-size:13px;color:var(--muted)"><div style="font-weight:600;color:var(--text);margin-bottom:6px">Контакты</div>+7 (495) 000-00-00<br>order@titan-rent.ru<br>Москва, ул. Строителей, д. 1</div>
+  </div>
+  <div class="container" style="border-top:1px solid var(--line);margin-top:22px;padding-top:22px;font-size:12px;color:#9ca3af;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div>ООО «Титан Рент». ИНН 7700000000. Сайт является прототипом сервиса.</div>
+    <div>Публичная оферта · Политика конфиденциальности</div>
+  </div>
+</footer>
+
+<div class="modal" id="thanksModal">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeThanks()">×</button>
+    <h3>Заявка принята</h3>
+    <p>Спасибо! Менеджер Titan свяжется с вами в ближайшее время для подтверждения подачи крана и итогового расчёта.</p>
+  </div>
+</div>
+
+<script>
+// Данные парка (ориентировочные, по открытым прайсам Москвы/МО)
+const cranes = [
+  {name:'Автокран 14 т (КАМАЗ/Ивановец)', cap:14, boom:14, height:22, shift:8000, hour:1000, mkad:50, img:''},
+  {name:'Автокран 16 т (Клинцы/КАМАЗ)', cap:16, boom:20, height:28, shift:10000, hour:1250, mkad:50},
+  {name:'Автокран 25 т вездеход (Галичанин)', cap:25, boom:28, height:35, shift:13000, hour:1700, mkad:65},
+  {name:'Автокран 25 т (Ивановец)', cap:25, boom:31, height:38, shift:14000, hour:1800, mkad:50},
+  {name:'Автокран 32 т (Галичанин)', cap:32, boom:31, height:42, shift:15000, hour:2000, mkad:60},
+  {name:'Автокран 40 т (Liebherr LTM 1040)', cap:40, boom:35, height:44, shift:28000, hour:3250, mkad:95},
+  {name:'Автокран 50 т (Liebherr LTM 1050)', cap:50, boom:39, height:64, shift:50000, hour:5625, mkad:260},
+  {name:'Автокран 60 т (ZMC-60/MAZ)', cap:60, boom:42, height:60, shift:70000, hour:null, mkad:360},
+  {name:'Автокран 100 т (Liebherr LTM 1100)', cap:100, boom:52, height:60, shift:100000, hour:null, mkad:360},
+];
+
+const fleetList = document.getElementById('fleetList');
+cranes.forEach(c=>{
+  const el = document.createElement('article');
+  el.className='crane';
+  el.innerHTML = `
+    <div class="crane-head"><h4>${c.name}</h4><div class="price">${c.shift.toLocaleString('ru-RU')} ₽ / смена</div></div>
+    <p><b>Г/п:</b> ${c.cap} т &nbsp;·&nbsp; <b>Стрела:</b> до ${c.boom} м &nbsp;·&nbsp; <b>Подъём:</b> до ${c.height} м</p>
+    <div class="spec">${c.hour?`${c.hour.toLocaleString('ru-RU')} ₽ / час`:'Цена часа по запросу'} &nbsp;·&nbsp; ${c.mkad.toLocaleString('ru-RU')} ₽/км за МКАД</div>
+  `;
+  fleetList.appendChild(el);
+});
+
+const calcBtn = document.getElementById('calcBtn');
+const calcResult = document.getElementById('calcResult');
+const rModel=document.getElementById('rModel'), rCap=document.getElementById('rCap'), rShift=document.getElementById('rShift'), rHour=document.getElementById('rHour'), rDel=document.getElementById('rDel'), rTotal=document.getElementById('rTotal');
+const kmField=document.getElementById('kmField');
+document.getElementById('cZone').addEventListener('change',e=>{kmField.style.display=e.value==='omkad'?'block':'none';});
+
+function format(n){return n?n.toLocaleString('ru-RU'):'—';}
+
+calcBtn.addEventListener('click',()=>{
+  const load=+document.getElementById('cLoad').value;
+  const height=+document.getElementById('cHeight').value;
+  const radius=+document.getElementById('cRadius').value;
+  const zone=document.getElementById('cZone').value;
+  const km=+document.getElementById('cKm').value||0;
+
+  // требование с запасом безопасности 1.25
+  const needCap=load*1.25;
+  let suitable=cranes.filter(c=>c.cap>=needCap && c.boom>=radius && c.height>=height);
+  if(suitable.length===0){
+    // если по габаритам не подошло — берем по грузоподъёмности
+    suitable=cranes.filter(c=>c.cap>=needCap);
+  }
+  suitable.sort((a,b)=>a.shift-b.shift);
+  const best=suitable[0];
+
+  calcResult.classList.add('show');
+  if(!best){
+    rModel.textContent='Требуется индивидуальный подбор'; rCap.textContent='—'; rShift.textContent='—'; rHour.textContent='—'; rDel.textContent='—'; rTotal.textContent='—';
+    return;
+  }
+  const delCost = zone==='omkad' ? km*2*best.mkad : 0; // туда-обратно
+  const total = best.shift + delCost;
+  rModel.textContent=best.name;
+  rCap.textContent=best.cap+' т';
+  rShift.textContent=format(best.shift)+' ₽';
+  rHour.textContent=best.hour?format(best.hour)+' ₽':'договорная';
+  rDel.textContent=delCost?format(delCost)+' ₽':'вcluded (МКАД)';
+  rTotal.textContent=format(total)+' ₽';
+
+  // заполнить форму заказа
+  const sel=document.getElementById('fCrane');
+  sel.innerHTML='<option value="">Не выбрано</option>';
+  cranes.forEach(c=>{
+    const o=document.createElement('option'); o.value=c.name; o.textContent=c.name; sel.appendChild(o);
+  });
+  sel.value=best.name;
+});
+
+document.getElementById('orderBtn').addEventListener('click',(e)=>{
+  e.preventDefault();
+  const agree=document.getElementById('fAgree');
+  if(!agree.checked){agree.focus();return;}
+  document.getElementById('orderForm').reset();
+  document.getElementById('thanksModal').classList.add('open');
+});
+
+function closeThanks(){document.getElementById('thanksModal').classList.remove('open');}
+
+// аккордеон FAQ
+document.querySelectorAll('.faq-q').forEach(q=>{
+  q.addEventListener('click',()=>{
+    const item=q.parentElement; const a=item.querySelector('.faq-a'); const open=a.classList.toggle('open');
+    document.querySelectorAll('.faq-a').forEach(x=>{if(x!==a)x.classList.remove('open');x.style.maxHeight='0';});
+    a.style.maxHeight=open?a.scrollHeight+40+'px':'0';
+  });
+});
+</script>
+</body>
+</html>
